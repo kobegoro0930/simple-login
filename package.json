@@ -13,6 +13,7 @@
     "http-errors": "~1.6.3",
     "morgan": "~1.9.1",
     "sequelize": "^6.24.0",
+    "sequelize-cli": "^6.5.1",
     "sqlite3": "^5.1.2"
   }
 }
