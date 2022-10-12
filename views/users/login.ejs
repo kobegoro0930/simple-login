@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta http-equiv="content-type"
+        content="text/html; charset=UTF-8">
+    <title><%= title %></title>
+  </head>
+
+<body>
+  <header>
+    <h1><%= title %></h1>
+  </header>
+  <div>
+    <p><%- content %></p>
+    <form method="post" action="/users/login">
+      <div>
+        <label for="mail">メールアドレス</label>
+        <input type="text" name="mail" id="mail">
+      </div>
+      <div>
+        <label for="pass">パスワード</label>
+        <input type="password" name="pass" id="pass">
+      </div>
+      <input type="submit" value="ログイン">
+    </form>
+    <p><a href="/users/add">アカウントの作成</a></p>
+  </div>
+</body>
+
+</html>

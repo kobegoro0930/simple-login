@@ -1,0 +1,4057 @@
+﻿Node.js超入門 第3版 掲載スクリプト
+--------------------------------------
+
+■2章
+--------------------------------------
+▼リスト2-1
+const http = require('http');
+
+var server = http.createServer(
+  (request,response)=>{
+    response.end('Hello Node.js!');
+  }
+);
+server.listen(3000);
+
+
+--------------------------------------
+
+
+▼リスト2-2
+const http = require('http');
+
+var server = http.createServer(
+  (request,response)=>{
+    response.end('<html><body><h1>Hello</h1><p>Welcome to Node.js</p></body></html>');
+  }
+);
+
+server.listen(3000);
+
+
+--------------------------------------
+
+
+▼リスト2-3
+const http = require('http');
+
+var server = http.createServer(
+  (request, response) => {
+    response.setHeader('Content-Type', 'text/html');
+    response.write('<!DOCTYPE html><html lang="ja">');
+    response.write('<head><meta charset="utf-8">');
+    response.write('<title>Hello</title></head>');
+    response.write('<body><h1>Hello Node.js!</h1>');
+    response.write('<p>This is Node.js sample page.</p>');
+    response.write('<p>これは、Node.jsのサンプルページです。</p>', 'utf8');
+    response.write('</body></html>');
+    response.end();
+  }
+);
+
+server.listen(3000);
+console.log('Server start!');
+
+
+--------------------------------------
+
+
+▼リスト2-4
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta http-equiv="content-type"
+    content="text/html; charset=UTF-8">
+  <title>Index</title>
+</head>
+
+<body>
+  <h1>Index</h1>
+  <p>これは、Indexページです。</p>
+</body>
+
+</html>
+
+
+--------------------------------------
+
+
+▼リスト2-5
+const http = require('http');
+const fs = require('fs');
+
+var server = http.createServer(
+  (request, response) => {
+    fs.readFile('./index.html', 'UTF-8',
+      (error, data) => {
+        response.writeHead(200, { 'Content-Type': 'text/html' });
+        response.write(data);
+        response.end();
+      });
+  }
+);
+
+server.listen(3000);
+console.log('Server start!');
+
+
+--------------------------------------
+
+
+▼リスト2-6
+const http = require('http');
+const fs = require('fs');
+
+var server = http.createServer(getFromClient);
+
+server.listen(3000);
+console.log('Server start!');
+
+// ここまでメインプログラム========
+
+// createServerの処理
+function getFromClient(req, res) {
+  request = req;
+  response = res;
+  fs.readFile('./index.html', 'UTF-8',
+    (error, data) => {
+      response.writeHead(200, { 'Content-Type': 'text/html' });
+      response.write(data);
+      response.end();
+    }
+  );
+}
+
+
+--------------------------------------
+
+
+▼リスト2-7
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta http-equiv="content-type"
+    content="text/html; charset=UTF-8">
+  <title>Index</title>
+  <style>
+    h1 {
+      font-size: 60pt;
+      color: #eee;
+      text-align: right;
+      margin: 0px;
+    }
+
+    body {
+      font-size: 14pt;
+      color: #999;
+      margin: 5px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <h1>Index</h1>
+  </header>
+  <div role="main">
+    <p>This is Index Page.</p>
+    <p>これは、EJSを使ったWebページです。</p>
+  </div>
+</body>
+
+</html>
+
+
+--------------------------------------
+
+
+▼リスト2-8
+const http = require('http');
+const fs = require('fs');
+const ejs = require('ejs');
+
+const index_page = fs.readFileSync('./index.ejs', 'utf8');
+
+var server = http.createServer(getFromClient);
+
+server.listen(3000);
+console.log('Server start!');
+
+// ここまでメインプログラム==========
+
+// createServerの処理
+function getFromClient(request, response){
+  var content = ejs.render(index_page);
+  response.writeHead(200, {'Content-Type': 'text/html'});
+  response.write(content);
+  response.end();
+}
+
+
+--------------------------------------
+
+
+▼リスト2-9
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta http-equiv="content-type"
+    content="text/html; charset=UTF-8">
+  <title><%=title %></title>
+  <style>
+    h1 {
+      font-size: 60pt;
+      color: #eee;
+      text-align: right;
+      margin: 0px;
+    }
+
+    body {
+      font-size: 14pt;
+      color: #999;
+      margin: 5px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <h1><%=title %></h1>
+  </header>
+  <div role="main">
+    <p><%=content %></p>
+  </div>
+</body>
+
+</html>
+
+
+--------------------------------------
+
+
+▼リスト2-10
+function getFromClient(request, response) {
+  var content = ejs.render(index_page, {
+    title: "Indexページ",
+    content: "これはテンプレートを使ったサンプルページです。",
+  });
+  response.writeHead(200, { 'Content-Type': 'text/html' });
+  response.write(content);
+  response.end();
+}
+
+
+--------------------------------------
+
+
+▼リスト2-11
+h1 {
+  font-size: 60pt;
+  color:#eee;
+  text-align:right;
+  margin:0px;
+}
+body {
+  font-size: 12pt;
+  color: #999;
+  margin:5px;
+}
+p {
+   font-size: 14pt;
+  margin: 0px 20px;
+}
+
+
+--------------------------------------
+
+
+▼リスト2-12
+<link type="text/css" href="./style.css" rel="stylesheet">
+
+
+--------------------------------------
+
+
+▼リスト2-13
+const http = require('http');
+const fs = require('fs');
+const ejs = require('ejs');
+const url = require('url');
+
+const index_page = fs.readFileSync('./index.ejs', 'utf8');
+const style_css = fs.readFileSync('./style.css', 'utf8');
+
+var server = http.createServer(getFromClient);
+
+server.listen(3000);
+console.log('Server start!');
+
+// ここまでメインプログラム==========
+
+// createServerの処理
+function getFromClient(request, response) {
+  var url_parts = url.parse(request.url);
+  switch (url_parts.pathname) {
+
+    case '/':
+      var content = ejs.render(index_page, {
+        title: "Index",
+        content: "これはテンプレートを使ったサンプルページです。",
+      });
+      response.writeHead(200, { 'Content-Type': 'text/html' });
+      response.write(content);
+      response.end();
+      break;
+
+    case '/style.css':
+      response.writeHead(200, { 'Content-Type': 'text/css' });
+      response.write(style_css);
+      response.end();
+      break;
+
+    default:
+      response.writeHead(200, { 'Content-Type': 'text/plain' });
+      response.end('no page...');
+      break;
+  }
+}
+
+
+--------------------------------------
+
+
+▼リスト2-14
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta http-equiv="content-type"
+    content="text/html; charset=UTF-8">
+  <title><%=title %></title>
+  <link rel="stylesheet"
+  href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+  crossorigin="anonymous">
+</head>
+
+<body class="container">
+
+  <header>
+    <h1 class="display-4"><%=title %></h1>
+  </header>
+  <div role="main">
+    <p><%=content %></p>
+  </div>
+</body>
+
+</html>
+
+
+--------------------------------------
+
+
+▼リスト2-15
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta http-equiv="content-type"
+    content="text/html; charset=UTF-8">
+  <title><%=title %></title>
+  <link rel="stylesheet"
+  href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+  crossorigin="anonymous">
+</head>
+
+<body class="container">
+  <header>
+    <h1 class="display-4"><%=title %></h1>
+  </header>
+  <div role="main">
+    <p><%=content %></p>
+    <p><a href="/other">Other Pageに移動 &gt;&gt;</a></p>
+  </div>
+</body>
+
+</html>
+
+
+--------------------------------------
+
+
+▼リスト2-16
+const http = require('http');
+const fs = require('fs');
+const ejs = require('ejs');
+const url = require('url');
+
+const index_page = fs.readFileSync('./index.ejs', 'utf8');
+const other_page = fs.readFileSync('./other.ejs', 'utf8'); //★追加
+const style_css = fs.readFileSync('./style.css', 'utf8');
+
+var server = http.createServer(getFromClient);
+
+server.listen(3000);
+console.log('Server start!');
+
+// ここまでメインプログラム==========
+
+// createServerの処理
+function getFromClient(request, response) {
+
+  var url_parts = url.parse(request.url);
+  switch (url_parts.pathname) {
+
+    case '/':
+      var content = ejs.render(index_page, {
+        title: "Index",
+        content: "これはIndexページです。",
+      });
+      response.writeHead(200, { 'Content-Type': 'text/html' });
+      response.write(content);
+      response.end();
+      break;
+
+    case '/other': //★追加
+      var content = ejs.render(other_page, {
+        title: "Other",
+        content: "これは新しく用意したページです。",
+      });
+      response.writeHead(200, { 'Content-Type': 'text/html' });
+      response.write(content);
+      response.end();
+      break;
+
+    default:
+      response.writeHead(200, { 'Content-Type': 'text/plain' });
+      response.end('no page...');
+      break;
+  }
+}
+
+
+--------------------------------------
+
+
+
+
+3章
+--------------------------------------
+▼リスト3-1
+const http = require('http');
+const fs = require('fs');
+const ejs = require('ejs');
+const url = require('url');
+
+const index_page = fs.readFileSync('./index.ejs', 'utf8');
+const other_page = fs.readFileSync('./other.ejs', 'utf8');
+const style_css = fs.readFileSync('./style.css', 'utf8');
+
+var server = http.createServer(getFromClient);
+
+server.listen(3000);
+console.log('Server start!');
+
+// ここまでメインプログラム==========
+
+// createServerの処理
+function getFromClient(request, response) {
+
+  var url_parts = url.parse(request.url, true); //☆trueにする!
+  switch (url_parts.pathname) {
+
+    case '/':
+      var content = "これはIndexページです。"
+      var query = url_parts.query;
+      if (query.msg != undefined) {
+        content += 'あなたは、「' + query.msg + '」と送りました。';
+      }
+      var content = ejs.render(index_page, {
+        title: "Index",
+        content: content,
+      });
+      response.writeHead(200, { 'Content-Type': 'text/html' });
+      response.write(content);
+      response.end();
+      break;
+
+    default:
+      response.writeHead(200, { 'Content-Type': 'text/plain' });
+      response.end('no page...');
+      break;
+  }
+}
+
+
+--------------------------------------
+
+
+▼リスト3-2
+<body class="container">
+  <header>
+    <h1 class="display-4"><%=title %></h1>
+  </header>
+  <div role="main">
+    <p><%=content %></p>
+    <form method="post" action="/other">
+      <input type="text" name="msg" class="form-control">
+      <input type="submit" value="Click" class="btn btn-primary">
+    </form>
+  </div>
+</body>
+
+
+--------------------------------------
+
+
+▼リスト3-3
+const http = require('http');
+const fs = require('fs');
+const ejs = require('ejs');
+const url = require('url');
+const qs = require('querystring'); //★追加
+
+const index_page = fs.readFileSync('./index.ejs', 'utf8');
+const other_page = fs.readFileSync('./other.ejs', 'utf8');
+const style_css = fs.readFileSync('./style.css', 'utf8');
+
+var server = http.createServer(getFromClient);
+
+server.listen(3000);
+console.log('Server start!');
+
+// ここまでメインプログラム==========
+
+// createServerの処理
+function getFromClient(request, response) {
+  var url_parts = url.parse(request.url, true); //★trueに
+
+  switch (url_parts.pathname) {
+
+    case '/':
+      response_index(request, response); //★修正
+      break;
+
+    case '/other':
+      response_other(request, response); //★修正
+      break;
+
+    case '/style.css':
+      response.writeHead(200, { 'Content-Type': 'text/css' });
+      response.write(style_css);
+      response.end();
+      break;
+
+    default:
+      response.writeHead(200, { 'Content-Type': 'text/plain' });
+      response.end('no page...');
+      break;
+  }
+}
+
+// ★indexのアクセス処理
+function response_index(request, response) {
+  var msg = "これはIndexページです。"
+  var content = ejs.render(index_page, {
+    title: "Index",
+    content: msg,
+  });
+  response.writeHead(200, { 'Content-Type': 'text/html' });
+  response.write(content);
+  response.end();
+}
+
+// ★otherのアクセス処理
+function response_other(request, response) {
+  var msg = "これはOtherページです。"
+
+  // POSTアクセス時の処理
+  if (request.method == 'POST') {
+    var body = '';
+
+    // データ受信のイベント処理
+    request.on('data', (data) => {
+      body += data;
+    });
+
+    // データ受信終了のイベント処理
+    request.on('end', () => {
+      var post_data = qs.parse(body); // ★データのパース
+      msg += 'あなたは、「' + post_data.msg + '」と書きました。';
+      var content = ejs.render(other_page, {
+        title: "Other",
+        content: msg,
+      });
+      response.writeHead(200, { 'Content-Type': 'text/html' });
+      response.write(content);
+      response.end();
+    });
+
+    // GETアクセス時の処理
+  } else {
+    var msg = "ページがありません。"
+    var content = ejs.render(other_page, {
+      title: "Other",
+      content: msg,
+    });
+    response.writeHead(200, { 'Content-Type': 'text/html' });
+    response.write(content);
+    response.end();
+  }
+}
+
+
+--------------------------------------
+
+
+▼リスト3-4
+// 追加するデータ用変数
+var data = {
+  'Taro': '09-999-999',
+  'Hanako': '080-888-888',
+  'Sachiko': '070-777-777',
+  'Ichiro': '060-666-666'
+};
+
+// indexのアクセス処理
+function response_index(request, response) {
+  var msg = "これはIndexページです。"
+  var content = ejs.render(index_page, {
+    title: "Index",
+    content: msg,
+    data: data,
+  });
+  response.writeHead(200, { 'Content-Type': 'text/html' });
+  response.write(content);
+  response.end();
+}
+
+
+--------------------------------------
+
+
+▼リスト3-5
+<body class="container">
+  <header>
+    <h1 class="display-4"><%=title %></h1>
+  </header>
+  <div role="main">
+    <p><%=content %></p>
+    <table class="table">
+      <% for(var key in data) { %>
+      <tr>
+        <th><%= key %></th>
+        <td><%= data[key] %></td>
+      </tr>
+      <% } %>
+    </table>
+  </div>
+</body>
+
+
+--------------------------------------
+
+
+▼リスト3-6
+<tr>
+  <th><%= id %></th>
+  <td><%= key %></td>
+  <td><%= val[0] %></td>
+</tr>
+
+
+--------------------------------------
+
+
+▼リスト3-7
+<body class="container">
+  <header>
+    <h1 class="display-4"><%=title %></h1>
+  </header>
+  <div role="main">
+    <p><%=content %></p>
+    <table class="table">
+      <% var id = 0; %>
+      <% for(var key in data) { %>
+      <%- include('data_item',
+              {id:++id, key:key, val:[data[key]]}) %>
+      <% } %>
+    </table>
+  </div>
+</body>
+
+
+--------------------------------------
+
+
+▼リスト3-8
+function response_index(request, response) {
+  var msg = "これはIndexページです。"
+  var content = ejs.render(index_page, {
+    title: "Index",
+    content: msg,
+    data: data,
+    filename: 'data_item' //☆追記
+  });
+  response.writeHead(200, { 'Content-Type': 'text/html' });
+  response.write(content);
+  response.end();
+}
+
+
+--------------------------------------
+
+
+▼リスト3-9
+<table class="table table-dark">
+  <tr>
+    <th><%= id %>:
+      <%= key %></th>
+  </tr>
+  <% for(var i in val){ %>
+  <tr>
+    <td><%= val[i] %></td>
+  </tr>
+  <% } %>
+</table>
+
+
+--------------------------------------
+
+
+▼リスト3-10
+<body class="container">
+  <header>
+    <h1 class="display-4"><%=title %></h1>
+  </header>
+  <div role="main">
+    <p><%=content %></p>
+    <% var id = 0; %>
+    <% for(var key in data) { %>
+    <%- include('data_item',
+          {id:++id, key:key, val:[data[key]]}) %>
+    <% } %>
+  </div>
+</body>
+
+
+--------------------------------------
+
+
+▼リスト3-11
+var data2 = {
+  'Taro': ['taro@yamada', '09-999-999', 'Tokyo'],
+  'Hanako': ['hanako@flower', '080-888-888', 'Yokohama'],
+  'Sachiko': ['sachi@happy', '070-777-777', 'Nagoya'],
+  'Ichiro': ['ichi@baseball', '060-666-666', 'USA'],
+}
+
+// otherのアクセス処理
+function response_other(request, response) {
+  var msg = "これはOtherページです。"
+  var content = ejs.render(other_page, {
+    title: "Other",
+    content: msg,
+    data: data2,
+    filename: 'data_item'
+  });
+  response.writeHead(200, { 'Content-Type': 'text/html' });
+  response.write(content);
+  response.end();
+}
+
+
+--------------------------------------
+
+
+▼リスト3-12
+<body class="container">
+  <header>
+    <h1 class="display-4"><%=title %></h1>
+  </header>
+  <div role="main">
+    <p><%=content %></p>
+    <% var id = 0; %>
+    <% for(var key in data) { %>
+    <%- include('data_item',
+          {id:++id, key:key, val:[data[key]]}) %>
+    <% } %>
+  </div>
+</body>
+
+
+--------------------------------------
+
+
+▼リスト3-13
+<body class="container">
+  <header>
+    <h1 class="display-4"><%=title %></h1>
+  </header>
+  <div role="main">
+    <p><%=content %></p>
+    <table class="table">
+      <tr>
+        <th>伝言です！</th>
+      </tr>
+      <tr>
+        <td><%=data.msg %></td>
+      </tr>
+    </table>
+    <form method="post" action="/">
+      <div class="form-group">
+        <label for="msg">MESSAGE</label>
+        <input type="text" name="msg" id="msg"
+          class="form-control">
+      </div>
+      <input type="submit" value="送信"
+        class="btn btn-primary">
+  </div>
+</body>
+
+
+--------------------------------------
+
+
+▼リスト3-14
+var data = { msg: 'no message...' };
+
+function response_index(request, response) {
+  // POSTアクセス時の処理
+  if (request.method == 'POST') {
+    var body = '';
+
+    // データ受信のイベント処理
+    request.on('data', (data) => {
+      body += data;
+    });
+
+    // データ受信終了のイベント処理
+    request.on('end', () => {
+      data = qs.parse(body); // ★データのパース
+      write_index(request, response);
+    });
+  } else {
+    write_index(request, response);
+  }
+}
+
+// indexの表示の作成
+function write_index(request, response) {
+  var msg = "※伝言を表示します。"
+  var content = ejs.render(index_page, {
+    title: "Index",
+    content: msg,
+    data: data,
+  });
+  response.writeHead(200, { 'Content-Type': 'text/html' });
+  response.write(content);
+  response.end();
+}
+
+
+--------------------------------------
+
+
+▼リスト3-15
+<body class="container">
+  <header>
+    <h1 class="display-4"><%=title %></h1>
+  </header>
+  <div role="main">
+    <p><%=content %></p>
+    <table class="table">
+      <tr>
+        <th>伝言です！</th>
+      </tr>
+      <tr>
+        <td><%=data.msg %></td>
+      </tr>
+    </table>
+    <p>your last message:<%= cookie_data %></p>
+    <form method="post" action="/">
+      <div class="form-group">
+        <label for="msg">MESSAGE</label>
+        <input type="text" name="msg" id="msg"
+          class="form-control">
+      </div>
+      <input type="submit" value="送信"
+        class="btn btn-primary">
+  </div>
+</body>
+
+
+--------------------------------------
+
+
+▼リスト3-16
+// データ
+var data = { msg: 'no message...' };
+
+// indexのアクセス処理
+function response_index(request, response) {
+  // POSTアクセス時の処理
+  if (request.method == 'POST') {
+    var body = '';
+
+    // データ受信のイベント処理
+    request.on('data', (data) => {
+      body += data;
+    });
+
+    // データ受信終了のイベント処理
+    request.on('end', () => {
+      data = qs.parse(body);
+      // クッキーの保存
+      setCookie('msg', data.msg, response);
+      write_index(request, response);
+    });
+  } else {
+    write_index(request, response);
+  }
+}
+
+// indexのページ作成
+function write_index(request, response) {
+  var msg = "※伝言を表示します。"
+  var cookie_data = getCookie('msg', request);
+  var content = ejs.render(index_page, {
+    title: "Index",
+    content: msg,
+    data: data,
+    cookie_data: cookie_data,
+  });
+  response.writeHead(200, { 'Content-Type': 'text/html' });
+  response.write(content);
+  response.end();
+}
+
+// クッキーの値を設定
+function setCookie(key, value, response) {
+  var cookie = escape(value);
+  response.setHeader('Set-Cookie', [key + '=' + cookie]);
+}
+// クッキーの値を取得
+function getCookie(key, request) {
+  var cookie_data = request.headers.cookie != undefined ?
+    request.headers.cookie : '';
+  var data = cookie_data.split(';');
+  for (var i in data) {
+    if (data[i].trim().startsWith(key + '=')) {
+      var result = data[i].trim().substring(key.length + 1);
+      return unescape(result);
+    }
+  }
+  return '';
+}
+
+
+--------------------------------------
+
+
+▼リスト3-17
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta http-equiv="content-type"
+    content="text/html; charset=UTF-8">
+  <title>ミニメッセージボード</title>
+  <link rel="stylesheet"
+  href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+  crossorigin="anonymous">
+  <script>
+    function init() {
+      var id = localStorage.getItem('id');
+      if (id == null) {
+        location.href = './login';
+      }
+      document.querySelector('#id').textContent = 'ID:' + id;
+      document.querySelector('#id_input').value = id;
+    }
+  </script>
+</head>
+
+<body class="container" onload="init();">
+  <header>
+    <h1 class="display-4">メッセージボード</h1>
+  </header>
+  <div role="main">
+    <p>※メッセージは最大10個まで保管されます。</p>
+    <form method="post" action="/">
+      <p id="id"></p>
+      <input type="hidden" id="id_input" name="id">
+      <div class="form-group">
+        <label for="msg">Message</label>
+        <input type="text" name="msg" id="msg"
+          class="form-control">
+      </div>
+      <input type="submit" value="送信"
+        class="btn btn-primary">
+    </form>
+
+    <table class="table">
+      <% for(var i in data) { %>
+      <%- include('data_item', {val:data[i]}) %>
+      <% } %>
+    </table>
+  </div>
+</body>
+
+</html>
+
+
+--------------------------------------
+
+
+▼リスト3-18
+<% if (val != ''){ %>
+<% var obj = JSON.parse(val); %>
+<tr>
+  <th><%= obj.id %></th>
+  <td><%= obj.msg %></td>
+</tr>
+<% } %>
+
+
+--------------------------------------
+
+
+▼リスト3-19
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta http-equiv="content-type"
+    content="text/html; charset=UTF-8">
+  <title>ミニメッセージボード</title>
+  <link rel="stylesheet"
+  href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+  crossorigin="anonymous">
+  <script>
+    function setId() {
+      var id = document.querySelector('#id_input').value;
+      localStorage.setItem('id', id);
+      location.href = '/';
+    }
+  </script>
+</head>
+
+<body class="container" onload="init();">
+
+  <header>
+    <h1 class="display-4">メッセージボード</h1>
+  </header>
+  <div role="main">
+    <p>あなたのログインネームを入力下さい。</p>
+    <div class="form-group">
+      <label for="id_input">Login name:</label>
+      <input type="text" id="id_input"
+        class="form-control">
+    </div>
+    <button onclick="setId();"
+      class="btn btn-primary">送信</button>
+  </div>
+</body>
+
+</html>
+
+
+--------------------------------------
+
+
+▼リスト3-20
+const http = require('http');
+const fs = require('fs');
+const ejs = require('ejs');
+const url = require('url');
+const qs = require('querystring');
+
+const index_page = fs.readFileSync('./index.ejs', 'utf8');
+const login_page = fs.readFileSync('./login.ejs', 'utf8');
+
+const max_num = 10; // 最大保管数
+const filename = 'mydata.txt'; // データファイル名
+var message_data; // データ
+readFromFile(filename);
+
+var server = http.createServer(getFromClient);
+
+server.listen(3000);
+console.log('Server start!');
+
+// ここまでメインプログラム==========
+
+// createServerの処理
+function getFromClient(request, response) {
+
+  var url_parts = url.parse(request.url, true);
+  switch (url_parts.pathname) {
+
+    case '/': // トップページ（メッセージボード）
+      response_index(request, response);
+      break;
+
+    case '/login': // ログインページ
+      response_login(request, response);
+      break;
+
+    default:
+      response.writeHead(200, { 'Content-Type': 'text/plain' });
+      response.end('no page...');
+      break;
+  }
+}
+
+// loginのアクセス処理
+function response_login(request, response) {
+  var content = ejs.render(login_page, {});
+  response.writeHead(200, { 'Content-Type': 'text/html' });
+  response.write(content);
+  response.end();
+}
+
+// indexのアクセス処理
+function response_index(request, response) {
+  // POSTアクセス時の処理
+  if (request.method == 'POST') {
+    var body = '';
+
+    // データ受信のイベント処理
+    request.on('data', function (data) {
+      body += data;
+    });
+
+    // データ受信終了のイベント処理
+    request.on('end', function () {
+      data = qs.parse(body);
+      addToData(data.id, data.msg, filename, request);
+      write_index(request, response);
+    });
+  } else {
+    write_index(request, response);
+  }
+}
+
+// indexのページ作成
+function write_index(request, response) {
+  var msg = "※何かメッセージを書いて下さい。";
+  var content = ejs.render(index_page, {
+    title: 'Index',
+    content: msg,
+    data: message_data,
+    filename: 'data_item',
+  });
+  response.writeHead(200, { 'Content-Type': 'text/html' });
+  response.write(content);
+  response.end();
+}
+
+// テキストファイルをロード
+function readFromFile(fname) {
+  fs.readFile(fname, 'utf8', (err, data) => {
+    message_data = data.split('\n');
+  })
+}
+
+// データを更新
+function addToData(id, msg, fname, request) {
+  var obj = { 'id': id, 'msg': msg };
+  var obj_str = JSON.stringify(obj);
+  console.log('add data: ' + obj_str);
+  message_data.unshift(obj_str);
+  if (message_data.length > max_num) {
+    message_data.pop();
+  }
+  saveToFile(fname);
+}
+
+// データを保存
+function saveToFile(fname) {
+  var data_str = message_data.join('\n');
+  fs.writeFile(fname, data_str, (err) => {
+    if (err) { throw err; }
+  });
+}
+
+
+--------------------------------------
+
+
+
+4章
+--------------------------------------
+▼リスト4-1
+{
+  "name": "ex-gen-app",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www"
+  },
+  "dependencies": {
+    "cookie-parser": "~1.4.4",
+    "debug": "~2.6.9",
+    "ejs": "~2.6.1",
+    "express": "~4.16.1",
+    "http-errors": "~1.6.3",
+    "morgan": "~1.9.1"
+  }
+}
+
+
+--------------------------------------
+
+
+▼リスト4-2
+const express = require('express')
+var app = express()
+
+app.get('/', (req, res) => {
+  res.send('Welcome to Express!')
+})
+
+app.listen(3000, () => {
+  console.log('Start server port:3000')
+})
+
+
+--------------------------------------
+
+
+▼リスト4-3
+const express = require('express')
+var app = express()
+
+app.get('/', (req, res) => {
+  res.send('Welcome to Express!')
+})
+
+app.listen(3000, () => {
+  console.log('Start server port:3000')
+})
+
+
+--------------------------------------
+
+
+▼リスト4-4
+var createError = require('http-errors');
+var express = require('express');
+var path = require('path');
+var cookieParser = require('cookie-parser');
+var logger = require('morgan');
+
+var indexRouter = require('./routes/index');
+var usersRouter = require('./routes/users');
+
+var app = express();
+
+// view engine setup
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
+
+app.use(logger('dev'));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
+app.use(express.static(path.join(__dirname, 'public')));
+
+app.use('/', indexRouter);
+app.use('/users', usersRouter);
+
+// catch 404 and forward to error handler
+app.use(function(req, res, next) {
+  next(createError(404));
+});
+
+// error handler
+app.use(function(err, req, res, next) {
+  // set locals, only providing error in development
+  res.locals.message = err.message;
+  res.locals.error = req.app.get('env') === 'development' ? err : {};
+
+  // render the error page
+  res.status(err.status || 500);
+  res.render('error');
+});
+
+module.exports = app;
+
+
+--------------------------------------
+
+
+▼リスト4-5
+var express = require('express');
+var router = express.Router();
+
+/* GET home page. */
+router.get('/',(req, res, next) => {
+  res.render('index', { title: 'Express' });
+});
+
+module.exports = router;
+
+
+--------------------------------------
+
+
+▼リスト4-6
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+    <h1><%= title %></h1>
+    <p>Welcome to <%= title %></p>
+  </body>
+</html>
+
+
+--------------------------------------
+
+
+▼リスト4-7
+#!/usr/bin/env node
+
+var app = require('../app');
+var debug = require('debug')('ex-gen-app:server');
+var http = require('http');
+
+var port = normalizePort(process.env.PORT || '3000');
+app.set('port', port);
+
+var server = http.createServer(app);
+
+server.listen(port);
+server.on('error', onError);
+server.on('listening', onListening);
+
+……以下略……
+
+
+--------------------------------------
+
+
+▼リスト4-8
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta http-equiv="content-type"
+      content="text/html; charset=UTF-8">
+    <title><%= title %></title>
+    <link rel="stylesheet"
+    href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    crossorigin="anonymous">
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body class="container">
+    <header>
+        <h1><%= title %></h1>
+    </header>
+    <div role="main">
+        <p><%- content %></p>
+    </div>
+  </body>
+</html>
+
+
+--------------------------------------
+
+
+▼リスト4-9
+const express = require('express');
+const router = express.Router();
+
+router.get('/', (req, res, next) => {
+  var data = {
+    title: 'Hello!',
+    content: 'これは、サンプルのコンテンツです。<br>this is sample content.'
+  };
+  res.render('hello', data);
+});
+
+module.exports = router;
+
+
+--------------------------------------
+
+
+▼リスト4-10
+var hello = require('./routes/hello');
+app.use('/hello', hello);
+
+
+--------------------------------------
+
+
+▼リスト4-11
+const express = require('express');
+const router = express.Router();
+
+router.get('/', (req, res, next) => {
+  var name = req.query.name;
+  var mail = req.query.mail;
+  var data = {
+    title: 'Hello!',
+    content: 'あなたの名前は、' + name + '。<br>' +
+      'メールアドレスは、' + mail + 'です。'
+  };
+  res.render('hello', data);
+});
+
+module.exports = router;
+
+
+--------------------------------------
+
+
+▼リスト4-12
+exports.json = bodyParser.json
+exports.query = require('./middleware/query');
+exports.static = require('serve-static');
+exports.urlencoded = bodyParser.urlencoded
+
+
+--------------------------------------
+
+
+▼リスト4-13
+<body class="container">
+  <header>
+    <h1 class="display-4">
+      <%= title %></h1>
+  </header>
+  <div role="main">
+    <p class="h6"><%- content %></p>
+    <form method="post" action="/hello/post">
+      <div class="form-group">
+        <label for="msg">Message:</label>
+        <input type="text" name="message" id="msg"
+          class="form-control">
+      </div>
+      <input type="submit" value="送信"
+        class="btn btn-primary">
+    </form>
+  </div>
+</body>
+
+
+--------------------------------------
+
+
+▼リスト4-14
+const express = require('express');
+const router = express.Router();
+
+router.get('/', (req, res, next) => {
+  var data = {
+    title: 'Hello!',
+    content: '※何か書いて送信して下さい。'
+  };
+  res.render('hello', data);
+});
+
+router.post('/post', (req, res, next) => {
+  var msg = req.body['message'];
+  var data = {
+    title: 'Hello!',
+    content: 'あなたは、「' + msg + '」と送信しました。'
+  };
+  res.render('hello', data);
+});
+
+module.exports = router;
+
+
+--------------------------------------
+
+
+▼リスト4-15
+const session = require('express-session'); //☆
+
+
+
+var session_opt = {
+  secret: 'keyboard cat',
+  resave: false,
+  saveUninitialized: false,
+  cookie: { maxAge: 60 * 60 * 1000 }
+};
+app.use(session(session_opt));
+
+
+--------------------------------------
+
+
+▼リスト4-16
+const express = require('express');
+const router = express.Router();
+
+router.get('/', (req, res, next) => {
+  var msg = '※何か書いて送信して下さい。';
+  if (req.session.message != undefined) {
+    msg = "Last Message: " + req.session.message;
+  }
+  var data = {
+    title: 'Hello!',
+    content: msg
+  };
+  res.render('hello', data);
+});
+
+router.post('/post', (req, res, next) => {
+  var msg = req.body['message'];
+  req.session.message = msg;
+  var data = {
+    title: 'Hello!',
+    content: "Last Message: " + req.session.message
+  };
+  res.render('hello', data);
+});
+
+module.exports = router;
+
+
+--------------------------------------
+
+
+▼リスト4-17
+const express = require('express');
+const router = express.Router();
+const http = require('https');
+const parseString = require('xml2js').parseString;
+
+router.get('/', (req, res, next) => {
+  var opt = {
+    host: 'news.google.com',
+    port: 443,
+    path: '/rss?hl=ja&ie=UTF-8&oe=UTF-8&gl=JP&ceid=JP:ja'
+  };
+  http.get(opt, (res2) => {
+    var body = '';
+    res2.on('data', (data) => {
+      body += data;
+    });
+    res2.on('end', () => {
+      parseString(body.trim(), (err, result) => {
+        console.log(result);
+        var data = {
+          title: 'Google News',
+          content: result.rss.channel[0].item
+        };
+        res.render('hello', data);
+      });
+    })
+  });
+});
+
+module.exports = router;
+
+
+--------------------------------------
+
+
+▼リスト4-18
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta http-equiv="content-type"
+    content="text/html; charset=UTF-8">
+  <title><%= title %></title>
+  <link rel="stylesheet"
+  href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+  crossorigin="anonymous">
+  <link rel='stylesheet'
+    href='/stylesheets/style.css' />
+</head>
+
+<body class="container">
+  <header>
+    <h1 class="display-4">
+      <%= title %></h1>
+  </header>
+  <div role="main">
+    <% if (content != null) { %>
+    <ol>
+      <% for(var i in content) { %>
+      <% var obj = content[i]; %>
+      <li><a href="<%=obj.link %>">
+        <%= obj.title %></a></li>
+      </tr>
+      <% } %>
+    </ol>
+    <% } %>
+  </div>
+</body>
+
+</html>
+
+
+--------------------------------------
+
+
+
+5章
+--------------------------------------
+▼リスト5-1
+<body class="container">
+  <header>
+    <h1 class="display-4">
+      <%= title %></h1>
+  </header>
+  <div role="main">
+    <table class="table">
+      <% for(var i in content) { %>
+      <tr>
+        <% var obj = content[i]; %>
+        <th><%= obj.id %></th>
+        <td><%= obj.name %></td>
+        <td><%= obj.mail %></td>
+        <td><%= obj.age %></td>
+      </tr>
+      <% } %>
+    </table>
+  </div>
+</body>
+
+
+--------------------------------------
+
+
+▼リスト5-2
+const express = require('express');
+const router = express.Router();
+
+const sqlite3 = require('sqlite3'); // 追加
+
+// データベースオブジェクトの取得
+const db = new sqlite3.Database('mydb.sqlite3');
+
+// GETアクセスの処理
+router.get('/',(req, res, next) => {
+  // データベースのシリアライズ
+  db.serialize(() => {
+    //レコードをすべて取り出す
+    db.all("select * from mydata",(err, rows) => {
+      // データベースアクセス完了時の処理
+      if (!err) {
+        var data = {
+          title: 'Hello!',
+          content: rows // 取得したレコードデータ
+        };
+        res.render('hello', data);
+      }
+    });
+  });
+});
+
+module.exports = router;
+
+
+--------------------------------------
+
+
+▼リスト5-3
+router.get('/',(req, res, next) => {
+  db.all("select * from mydata",(err, rows) => {
+    if (!err) {
+      var data = {
+        title: 'Hello!',
+        content: rows
+      };
+      res.render('hello', data);
+    }
+  });
+});
+
+
+--------------------------------------
+
+
+▼リスト5-4
+const express = require('express');
+const router = express.Router();
+
+const sqlite3 = require('sqlite3');
+
+// データベースオブジェクトの取得
+const db = new sqlite3.Database('mydb.sqlite3');
+
+// GETアクセスの処理
+router.get('/',(req, res, next) => {
+  db.serialize(() => {
+    var rows = "";
+    db.each("select * from mydata",(err, row) => {
+      if (!err) {
+        rows += "<tr><th>" + row.id + "</th><td>"
+          + row.name + "</td><td></tr>";
+      }
+    }, (err, count) => {
+      if (!err){
+        var data = {
+          title: 'Hello!',
+          content: rows
+        };
+        res.render('hello', data);
+      }
+    });
+  });
+});
+
+module.exports = router;
+
+
+--------------------------------------
+
+
+▼リスト5-5
+<body class="container">
+  <header>
+    <h1 class="display-4">
+      <%= title %></h1>
+  </header>
+  <div role="main">
+    <table class="table">
+      <%- content %>
+    </table>
+  </div>
+</body>
+
+
+--------------------------------------
+
+
+▼リスト5-6
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta http-equiv="content-type"
+    content="text/html; charset=UTF-8">
+  <title><%= title %></title>
+  <link rel="stylesheet"
+  href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    crossorigin="anonymous">
+  <link rel='stylesheet'
+    href='/stylesheets/style.css' />
+</head>
+
+<body class="container">
+
+  <header>
+    <h1 class="display-4">
+      <%= title %></h1>
+  </header>
+  <div role="main">
+    <p><%- content %></p>
+    <form method="post" action="/hello/add">
+      <div class="form-group">
+        <label for="name">NAME</label>
+        <input type="text" name="name" id="name"
+          class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="mail">MAIL</label>
+        <td><input type="text" name="mail" id="mail"
+          class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="age">AGE</label>
+        <td><input type="number" name="age" id="age"
+          class="form-control">
+      </div>
+      <input type="submit" value="作成"
+      class="btn btn-primary">
+    </form>
+  </div>
+</body>
+
+</html>
+
+
+--------------------------------------
+
+
+▼リスト5-7
+router.get('/add', (req, res, next) => {
+  var data = {
+      title: 'Hello/Add',
+      content: '新しいレコードを入力：'
+  }
+  res.render('hello/add', data);
+});
+
+router.post('/add', (req, res, next) => {
+  const nm = req.body.name;
+  const ml = req.body.mail;
+  const ag = req.body.age;
+  db.serialize(() => {
+    db.run('insert into mydata (name, mail, age) values (?, ?, ?)',
+      nm, ml, ag);
+  });
+  res.redirect('/hello');
+});
+
+
+--------------------------------------
+
+
+▼リスト5-8
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta http-equiv="content-type"
+    content="text/html; charset=UTF-8">
+  <title><%= title %></title>
+  <link rel="stylesheet"
+  href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+  crossorigin="anonymous">
+  <link rel='stylesheet'
+    href='/stylesheets/style.css' />
+</head>
+
+<body class="container">
+
+  <header>
+    <h1 class="display-4">
+      <%= title %></h1>
+  </header>
+  <div role="main">
+    <p><%= content %></p>
+    <table class="table">
+      <tr>
+        <th>ID</th>
+        <td><%= mydata.id %></td>
+      </tr>
+      <tr>
+        <th>NAME</th>
+        <td><%= mydata.name %></td>
+      </tr>
+      <tr>
+        <th>MAIL</th>
+        <td><%= mydata.mail %></td>
+      </tr>
+      <tr>
+        <th>AGE</th>
+        <td><%= mydata.age %></td>
+      </tr>
+    </table>
+  </div>
+</body>
+
+</html>
+
+
+--------------------------------------
+
+
+▼リスト5-9
+router.get('/show', (req, res, next) => {
+    const id = req.query.id;
+    db.serialize(() => {
+        const q = "select * from mydata where id = ?";
+        db.get(q, [id], (err, row) => {
+            if (!err) {
+                var data = {
+                title: 'Hello/show',
+                content: 'id = ' + id + ' のレコード：',
+                mydata: row
+            }
+            res.render('hello/show', data);
+            }
+        });
+    });
+});
+
+
+--------------------------------------
+
+
+▼リスト5-10
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta http-equiv="content-type"
+    content="text/html; charset=UTF-8">
+  <title><%= title %></title>
+  <link rel="stylesheet"
+  href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+  crossorigin="anonymous">
+  <link rel='stylesheet'
+    href='/stylesheets/style.css' />
+</head>
+
+<body class="container">
+
+  <header>
+    <h1 class="display-4">
+      <%= title %></h1>
+  </header>
+  <div role="main">
+    <p><%= content %></p>
+    <form method="post" action="/hello/edit">
+      <input type="hidden" name="id"
+        value="<%= mydata.id %>">
+      <div class="form-group">
+        <label for="name">NAME</label>
+        <input type="text" name="name" id="name"
+          class="form-control" value="<%= mydata.name %>">
+      </div>
+      <div class="form-group">
+        <label for="mail">MAIL</label>
+        <td><input type="text" name="mail" id="mail"
+          class="form-control" value="<%= mydata.mail %>">
+      </div>
+      <div class="form-group">
+        <label for="age">AGE</label>
+        <td><input type="number" name="age" id="age"
+          class="form-control" value="<%= mydata.age %>">
+      </div>
+      <input type="submit" value="更新"
+        class="btn btn-primary">
+    </form>
+  </div>
+</body>
+
+</html>
+
+
+--------------------------------------
+
+
+▼リスト5-11
+router.get('/edit', (req, res, next) => {
+  const id = req.query.id;
+  db.serialize(() => {
+      const q = "select * from mydata where id = ?";
+      db.get(q, [id], (err, row) => {
+          if (!err) {
+              var data = {
+              title: 'hello/edit',
+              content: 'id = ' + id + ' のレコードを編集：',
+              mydata: row
+          }
+          res.render('hello/edit', data);
+          }
+      });
+  });
+});
+
+router.post('/edit', (req, res, next) => {
+  const id = req.body.id;
+  const nm = req.body.name;
+  const ml = req.body.mail;
+  const ag = req.body.age;
+  const q = "update mydata set name = ?, mail = ?, age = ? where id = ?";
+  db.serialize(() => {
+    db.run(q, nm, ml, ag, id);
+  });
+  res.redirect('/hello');
+});
+
+
+--------------------------------------
+
+
+▼リスト5-12
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta http-equiv="content-type"
+    content="text/html; charset=UTF-8">
+  <title><%= title %></title>
+  <link rel="stylesheet"
+  href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+  crossorigin="anonymous">
+  <link rel='stylesheet'
+    href='/stylesheets/style.css' />
+</head>
+
+<body class="container">
+
+  <header>
+    <h1 class="display-4">
+      <%= title %></h1>
+  </header>
+  <div role="main">
+    <p><%= content %></p>
+    <table class="table">
+      <tr>
+        <th>NAME</th>
+        <td><%= mydata.name %></td>
+      </tr>
+      <tr>
+        <th>MAIL</th>
+        <td><%= mydata.mail %></td>
+      </tr>
+      <tr>
+        <th>AGE</th>
+        <td><%= mydata.age %></td>
+      </tr>
+      <tr>
+        <th></th>
+        <td></td>
+      </tr>
+    </table>
+    <form method="post" action="/hello/delete">
+      <input type="hidden" name="id"
+        value="<%= mydata.id %>">
+      <input type="submit" value="削除"
+        class="btn btn-primary">
+    </form>
+  </div>
+</body>
+
+</html>
+
+
+--------------------------------------
+
+
+▼リスト5-13
+router.get('/delete', (req, res, next) => {
+  const id = req.query.id;
+  db.serialize(() => {
+      const q = "select * from mydata where id = ?";
+      db.get(q, [id], (err, row) => {
+          if (!err) {
+              var data = {
+              title: 'Hello/Delete',
+              content: 'id = ' + id + ' のレコードを削除：',
+              mydata: row
+          }
+          res.render('hello/delete', data);
+          }
+      });
+  });
+});
+
+router.post('/delete', (req, res, next) => {
+  const id = req.body.id;
+  db.serialize(() => {
+    const q = "delete from mydata where id = ?";
+    db.run(q, id);
+  });
+  res.redirect('/hello');
+});
+
+
+--------------------------------------
+
+
+▼リスト5-14
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta http-equiv="content-type"
+    content="text/html; charset=UTF-8">
+  <title><%= title %></title>
+  <link rel="stylesheet"
+  href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+  crossorigin="anonymous">
+  <link rel='stylesheet'
+    href='/stylesheets/style.css' />
+</head>
+
+<body class="container">
+
+  <header>
+    <h1 class="display-4">
+      <%= title %></h1>
+  </header>
+  <div role="main">
+    <p><%= content %></p>
+    <form method="post" action="/hello/find">
+      <div class="form-group">
+        <label for="find">FIND</label>
+        <input type="text" name="find" id="find"
+          class="form-control" value="<%=find %>">
+      </div>
+      <input type="submit" value="更新"
+        class="btn btn-primary">
+    </form>
+
+    <table class="table mt-4">
+      <% for(var i in mydata) { %>
+      <tr>
+        <% var obj = mydata[i]; %>
+        <th><%= obj.id %></th>
+        <td><%= obj.name %></td>
+        <td><%= obj.mail %></td>
+        <td><%= obj.age %></td>
+      </tr>
+      <% } %>
+    </table>
+  </div>
+</body>
+
+</html>
+
+
+--------------------------------------
+
+
+▼リスト5-15
+router.get('/find',(req, res, next) => {
+  db.serialize(() => {
+    db.all("select * from mydata",(err, rows) => {
+      if (!err) {
+        var data = {
+          title: 'Hello/find',
+          find:'',
+          content:'検索条件を入力して下さい。',
+          mydata: rows
+        };
+        res.render('hello/find', data);
+      }
+    });
+  });
+});
+
+router.post('/find', (req, res, next) => {
+  var find = req.body.find;
+  db.serialize(() => {
+    var q = "select * from mydata where ";
+    db.all(q + find, [], (err, rows) => {
+      if (!err) {
+        var data = {
+          title: 'Hello/find',
+          find:find,
+          content: '検索条件 ' + find,
+          mydata: rows
+        }
+        res.render('hello/find', data);
+      }
+    });
+  });
+});
+
+
+--------------------------------------
+
+
+▼リスト5-16
+<body class="container">
+  <header>
+    <h1 class="display-4">
+      <%= title %></h1>
+  </header>
+  <div role="main">
+    <p><%- content %></p>
+    <form method="post" action="/hello/add">
+      <div class="form-group">
+        <label for="name">NAME</label>
+        <input type="text" name="name" id="name"
+          value="<%= form.name %>"
+          class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="mail">MAIL</label>
+        <td><input type="text" name="mail" id="mail"
+            value="<%= form.mail %>"
+            class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="age">AGE</label>
+        <td><input type="number" name="age" id="age"
+          value="<%= form.age %>"
+          class="form-control">
+      </div>
+      <input type="submit" value="作成"
+        class="btn btn-primary">
+    </form>
+  </div>
+</body>
+
+
+--------------------------------------
+
+
+▼リスト5-17
+const { check, validationResult } = require('express-validator');
+
+router.get('/add', (req, res, next) => {
+  var data = {
+      title: 'Hello/Add',
+      content: '新しいレコードを入力：',
+      form: {name:'', mail:'', age:0}
+  }
+  res.render('hello/add', data);
+});
+
+router.post('/add', [
+    check('name','NAME は必ず入力して下さい。').notEmpty(),
+    check('mail','MAIL はメールアドレスを記入して下さい。').isEmail(),
+    check('age', 'AGE は年齢（整数）を入力下さい。').isInt()
+  ], (req, res, next) => {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+        var result = '<ul class="text-danger">';
+        var result_arr = errors.array();
+        for(var n in result_arr) {
+          result += '<li>' + result_arr[n].msg + '</li>'
+        }
+        result += '</ul>';
+        var data = {
+            title: 'Hello/Add',
+            content: result,
+            form: req.body
+        }
+        res.render('hello/add', data);
+    } else {
+        var nm = req.body.name;
+        var ml = req.body.mail;
+        var ag = req.body.age;
+        db.serialize(() => {
+          db.run('insert into mydata (name, mail, age) values (?, ?, ?)', nm, ml, ag);
+        });
+        res.redirect('/hello');
+    }
+});
+
+
+--------------------------------------
+
+
+▼リスト5-18
+router.post('/add', [
+    check('name','NAME は必ず入力して下さい。').notEmpty().escape(),
+    check('mail','MAIL はメールアドレスを記入して下さい。').isEmail().escape(),
+    check('age', 'AGE は年齢（整数）を入力下さい。').isInt()
+  ], (req, res, next) => {……略……
+
+
+--------------------------------------
+
+
+▼リスト5-19
+router.post('/add', [
+    check('name','NAME は必ず入力して下さい。').notEmpty(),
+    check('mail','MAIL はメールアドレスを記入して下さい。').isEmail(),
+    check('age', 'AGE は年齢（整数）を入力下さい。').isInt(),
+    check('age', 'AGE はゼロ以上120以下で入力下さい。').custom(value =>{
+      return value >= 0 & value <= 120;
+    })
+  ], (req, res, next) => {……以下略……
+
+
+--------------------------------------
+
+
+▼リスト6-1
+{
+  "development": {
+    "username": "root",
+    "password": null,
+    "database": "database_development",
+    "host": "127.0.0.1",
+    "dialect": "mysql",
+  },
+  "test": {
+    "username": "root",
+    "password": null,
+    "database": "database_test",
+    "host": "127.0.0.1",
+    "dialect": "mysql",
+  },
+  "production": {
+    "username": "root",
+    "password": null,
+    "database": "database_production",
+    "host": "127.0.0.1",
+    "dialect": "mysql",
+  }
+}
+
+
+--------------------------------------
+
+
+▼リスト6-2
+{
+  "development": {
+    "database": "db-development",
+    "dialect": "sqlite",
+    "storage": "db-dev.sqlite3"
+  },
+  "test": {
+    "database": "db-test",
+    "dialect": "sqlite",
+    "storage": "db-test.sqlite3"
+  },
+  "production": {
+    "database": "db-product",
+    "dialect": "sqlite",
+    "storage": "db.sqlite3"
+  }
+}
+
+
+--------------------------------------
+
+
+▼リスト6-3
+'use strict';
+module.exports = (sequelize, DataTypes) => {
+  const User = sequelize.define('User', {
+    name: DataTypes.STRING,
+    pass: DataTypes.STRING,
+    mail: DataTypes.STRING,
+    age: DataTypes.INTEGER
+  }, {});
+  User.associate = function(models) {
+    // associations can be defined here
+  };
+  return User;
+};
+
+
+--------------------------------------
+
+
+▼リスト6-4
+'use strict';
+module.exports = {
+  up: async (queryInterface, Sequelize) => {
+    await queryInterface.createTable('Users', {
+      id: {
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: Sequelize.INTEGER
+      },
+      name: {
+        type: Sequelize.STRING
+      },
+      pass: {
+        type: Sequelize.STRING
+      },
+      mail: {
+        type: Sequelize.STRING
+      },
+      age: {
+        type: Sequelize.INTEGER
+      },
+      createdAt: {
+        allowNull: false,
+        type: Sequelize.DATE
+      },
+      updatedAt: {
+        allowNull: false,
+        type: Sequelize.DATE
+      }
+    });
+  },
+  down: async (queryInterface, Sequelize) => {
+    await queryInterface.dropTable('Users');
+  }
+};
+
+
+--------------------------------------
+
+
+▼リスト6-5
+'use strict';
+
+module.exports = {
+  up: async (queryInterface, Sequelize) => {
+
+  },
+
+  down: async (queryInterface, Sequelize) => {
+
+  }
+};
+
+
+--------------------------------------
+
+
+▼リスト6-6
+'use strict';
+
+module.exports = {
+  up: async (queryInterface, Sequelize) => {
+    return queryInterface.bulkInsert('Users', [
+      {
+        name: 'Taro',
+        pass: 'yamada',
+        mail: 'taro@yamada.jp',
+        age:39,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name: 'Hanako',
+        pass: 'flower',
+        mail: 'hanako@flower.com',
+        age:28,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name: 'Jiro',
+        pass: 'change',
+        mail: 'jiro@change.com',
+        age:17,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name: 'Sachiko',
+        pass: 'happy',
+        mail: 'sachiko@happy.jp',
+        age:6,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      }
+    ]);
+  },
+
+  down: async (queryInterface, Sequelize) => {
+    return queryInterface.bulkDelete('Users', null, {});
+  }
+};
+
+
+--------------------------------------
+
+
+▼リスト6-7
+const express = require('express');
+const router = express.Router();
+const db = require('../models/index');
+
+/* GET users listing. */
+router.get('/',(req, res, next)=> {
+  db.User.findAll().then(usrs => {
+    var data = {
+      title: 'Users/Index',
+      content: usrs
+    }
+    res.render('users/index', data);
+  });
+});
+
+module.exports = router;
+
+
+--------------------------------------
+
+
+▼リスト6-8
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta http-equiv="content-type"
+    content="text/html; charset=UTF-8">
+  <title><%= title %></title>
+  <link rel="stylesheet"
+  href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+  crossorigin="anonymous">
+  <link rel='stylesheet'
+    href='/stylesheets/style.css' />
+</head>
+
+<body class="container">
+
+  <header>
+    <h1 class="display-4">
+      <%= title %></h1>
+  </header>
+  <div role="main">
+    <table class="table">
+      <% for(var i in content) { %>
+      <tr>
+        <% var obj = content[i]; %>
+        <th><%= obj.id %></th>
+        <td><%= obj.name %></td>
+        <td><%= obj.mail %></td>
+        <td><%= obj.age %></td>
+      </tr>
+      <% } %>
+    </table>
+  </div>
+</body>
+
+</html>
+
+
+--------------------------------------
+
+
+▼リスト6-9
+router.get('/',(req, res, next)=> {
+  const id = req.query.id
+  db.User.findAll({
+    where: {
+      id: id
+    }
+  }).then(usrs => {
+    var data = {
+      title: 'Users/Index',
+      content: usrs
+    }
+    res.render('users/index', data);
+  });
+});
+
+
+--------------------------------------
+
+
+▼リスト6-10
+const { Op } = require("sequelize");
+
+router.get('/',(req, res, next)=> {
+  const id = req.query.id
+  db.User.findAll({
+    where: {
+      id:{ [Op.lte]:id }
+    }
+  }).then(usrs => {
+    var data = {
+      title: 'Users/Index',
+      content: usrs
+    }
+    res.render('users/index', data);
+  });
+});
+
+
+--------------------------------------
+
+
+▼リスト6-11
+router.get('/',(req, res, next)=> {
+  const nm = req.query.name
+  db.User.findAll({
+    where: {
+      name: {[Op.like]:'%'+nm+'%'}
+    }
+  }).then(usrs => {
+    var data = {
+      title: 'Users/Index',
+      content: usrs
+    }
+    res.render('users/index', data);
+  });
+});
+
+
+--------------------------------------
+
+
+▼リスト6-12
+router.get('/',(req, res, next)=> {
+  const min = req.query.min * 1
+  const max = req.query.max * 1
+  db.User.findAll({
+    where: {
+      age: {[Op.gte]:min, [Op.lte]:max}
+    }
+  }).then(usrs => {
+    var data = {
+      title: 'Users/Index',
+      content: usrs
+    }
+    res.render('users/index', data);
+  });
+});
+
+
+--------------------------------------
+
+
+▼リスト6-13
+router.get('/',(req, res, next) =>{
+  const nm = req.query.name;
+  const ml = req.query.mail;
+  db.User.findAll({
+    where: {
+      [Op.or]:[
+        {name:{[Op.like]:'%'+nm+'%'}},
+        {mail:{[Op.like]:'%'+ml+'%'}}
+      ]
+    }
+  }).then(usrs => {
+    var data = {
+      title: 'Users/Index',
+      content: usrs
+    }
+    res.render('users/index', data);
+  });
+});
+
+
+--------------------------------------
+
+
+▼リスト6-14
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta http-equiv="content-type"
+    content="text/html; charset=UTF-8">
+  <title><%= title %></title>
+  <link rel="stylesheet"
+  href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+  crossorigin="anonymous">
+  <link rel='stylesheet'
+    href='/stylesheets/style.css' />
+</head>
+
+<body class="container">
+
+  <header>
+    <h1 class="display-4">
+      <%= title %></h1>
+  </header>
+  <div role="main">
+    <form method="post" action="/users/add">
+      <div class="form-group">
+        <label for="name">NAME</label>
+        <input type="text" name="name" id="name"
+          class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="pass"">PASSWORD</label>
+        <input type=" password" name="pass" id="pass"
+          class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="mail">MAIL</label>
+        <td><input type="text" name="mail" id="mail"
+          class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="age">AGE</label>
+        <td><input type="number" name="age" id="age"
+          class="form-control">
+      </div>
+      <input type="submit" value="作成"
+        class="btn btn-primary">
+    </form>
+  </div>
+</body>
+
+</html>
+
+
+--------------------------------------
+
+▼リスト6-15
+router.get('/add',(req, res, next)=> {
+  var data = {
+    title: 'Users/Add'
+  }
+  res.render('users/add', data);
+});
+
+router.post('/add',(req, res, next)=> {
+  db.sequelize.sync()
+    .then(() => db.User.create({
+      name: req.body.name,
+      pass: req.body.pass,
+      mail: req.body.mail,
+      age: req.body.age
+    }))
+    .then(usr => {
+      res.redirect('/users');
+    });
+});
+
+
+--------------------------------------
+
+
+▼リスト6-16
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta http-equiv="content-type"
+    content="text/html; charset=UTF-8">
+  <title><%= title %></title>
+  <link rel="stylesheet"
+  href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+  crossorigin="anonymous">
+  <link rel='stylesheet'
+    href='/stylesheets/style.css' />
+</head>
+
+<body class="container">
+  <header>
+    <h1 class="display-4">
+      <%= title %></h1>
+  </header>
+  <div role="main">
+    <form method="post" action="/users/edit">
+      <input type="hidden" name="id" value="<%= form.id %>">
+      <div class="form-group">
+        <label for="name">NAME</label>
+        <input type="text" name="name" id="name"
+          class="form-control" value="<%= form.name %>">
+      </div>
+      <div class="form-group">
+        <label for="pass">PASSWORD</label>
+        <input type="text" name="pass" id="pass"
+          class="form-control" value="<%= form.pass %>">
+      </div>
+      <div class="form-group">
+        <label for="mail">MAIL</label>
+        <td><input type="text" name="mail" id="mail"
+            class="form-control" value="<%= form.mail %>">
+      </div>
+      <div class="form-group">
+        <label for="age">AGE</label>
+        <td><input type="number" name="age" id="age"
+          class="form-control" value="<%= form.age %>">
+      </div>
+      <input type="submit" value="更新"
+        class="btn btn-primary">
+    </form>
+  </div>
+</body>
+
+</html>
+
+
+--------------------------------------
+
+
+▼リスト6-17
+router.get('/edit',(req, res, next)=> {
+  db.User.findByPk(req.query.id)
+  .then(usr => {
+    var data = {
+      title: 'Users/Edit',
+      form: usr
+    }
+    res.render('users/edit', data);
+  });
+});
+
+router.post('/edit',(req, res, next)=> {
+  db.sequelize.sync()
+  .then(() => db.User.update({
+    name: req.body.name,
+    pass: req.body.pass,
+    mail: req.body.mail,
+    age: req.body.age
+  },
+  {
+    where:{id:req.body.id}
+  }))
+  .then(usr => {
+    res.redirect('/users');
+  });
+});
+
+
+--------------------------------------
+
+
+▼リスト6-18
+router.post('/edit',(req, res, next)=> {
+  db.User.findByPk(req.body.id)
+  .then(usr => {
+    usr.name = req.body.name;
+    usr.pass = req.body.pass;
+    usr.mail = req.body.mail;
+    usr.age = req.body.age;
+    usr.save().then(()=>res.redirect('/users'));
+  });
+});
+
+
+--------------------------------------
+
+
+▼リスト6-19
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta http-equiv="content-type"
+    content="text/html; charset=UTF-8">
+  <title><%= title %></title>
+  <link rel="stylesheet"
+  href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+  crossorigin="anonymous">
+  <link rel='stylesheet'
+    href='/stylesheets/style.css' />
+</head>
+
+<body class="container">
+  <header>
+    <h1 class="display-4">
+      <%= title %></h1>
+  </header>
+  <div role="main">
+    <table class="table">
+      <tr>
+        <th>NAME</th>
+        <td><%= form.name %></td>
+      </tr>
+      <tr>
+        <th>PASSWORD</th>
+        <td><%= form.pass %></td>
+      </tr>
+      <tr>
+        <th>MAIL</th>
+        <td><%= form.mail %></td>
+      </tr>
+      <tr>
+        <th>AGE</th>
+        <td><%= form.age %></td>
+      </tr>
+      <tr>
+        <th></th>
+        <td></td>
+      </tr>
+    </table>
+    <form method="post" action="/users/delete">
+      <input type="hidden" name="id"
+        value="<%= form.id %>">
+      <input type="submit" value="削除"
+        class="btn btn-primary">
+    </form>
+  </div>
+</body>
+
+</html>
+
+
+
+--------------------------------------
+
+
+▼リスト6-20
+router.get('/delete',(req, res, next)=> {
+  db.User.findByPk(req.query.id)
+  .then(usr => {
+    var data = {
+      title: 'Users/Delete',
+      form: usr
+    }
+    res.render('users/delete', data);
+  });
+});
+
+router.post('/delete',(req, res, next)=> {
+  db.sequelize.sync()
+  .then(() => db.User.destroy({
+    where:{id:req.body.id}
+  }))
+  .then(usr => {
+    res.redirect('/users');
+  });
+});
+
+
+--------------------------------------
+
+
+▼リスト6-21
+router.post('/delete',(req, res, next)=> {
+  db.User.findByPk(req.body.id)
+  .then(usr => {
+    usr.destroy().then(()=>res.redirect('/users'));
+  });
+});
+
+
+--------------------------------------
+
+
+▼リスト6-22
+'use strict';
+module.exports = (sequelize, DataTypes) => {
+  const User = sequelize.define('User', {
+    name: {
+      type:DataTypes.STRING,
+      validate: {
+        notEmpty: true
+      }
+    },
+    pass: {
+      type: DataTypes.STRING,
+      validate: {
+        notEmpty: true
+      }
+    },
+    mail: {
+      type: DataTypes.STRING,
+      validate: {
+        isEmail: true
+      }
+    },
+    age: {
+      type: DataTypes.INTEGER,
+      validate: {
+        isInt: true,
+        min: 0
+      }
+    }
+  }, {});
+  User.associate = function(models) {
+    // associations can be defined here
+  };
+  return User;
+};
+
+
+--------------------------------------
+
+
+▼リスト6-23
+router.get('/add',(req, res, next)=> {
+  var data = {
+    title: 'Users/Add',
+    form: new db.User(),
+    err:null
+  }
+  res.render('users/add', data);
+});
+
+router.post('/add',(req, res, next)=> {
+  const form = {
+    name: req.body.name,
+    pass: req.body.pass,
+    mail: req.body.mail,
+    age: req.body.age
+  };
+  db.sequelize.sync()
+    .then(() => db.User.create(form)
+    .then(usr=> {
+      res.redirect('/users')
+    })
+    .catch(err=> {
+      var data = {
+        title: 'Users/Add',
+        form: form,
+        err: err
+      }
+      res.render('users/add', data);
+    })
+    )
+});
+
+
+--------------------------------------
+
+
+▼リスト6-24
+<body class="container">
+
+  <header>
+    <h1 class="display-4">
+      <%= title %></h1>
+  </header>
+  <div role="main">
+    <ol class="text-danger">
+      <% if (err!=null) { for (let i in err.errors) { %>
+      <li><%= err.errors[i].message %></li>
+      <% }} %>
+    </ol>
+    <form method="post" action="/users/add">
+      <div class="form-group">
+        <label for="name">NAME</label>
+        <input type="text" name="name" id="name"
+          value="<%=form.name %>" class="form-control">
+        <ul class="text-danger">
+          <% if (err!=null) { for (let i in err.get("name")) { %>
+          <li><%= err.get("name")[i].message %></li>
+          <% }} %>
+        </ul>
+      </div>
+      <div class="form-group">
+        <label for="pass"">PASSWORD</label>
+        <input type=" password" name="pass" id="pass"
+        value="<%=form.pass %>" class="form-control">
+        <ul class="text-danger">
+          <% if (err!=null) { for (let i in err.get("pass")) { %>
+          <li><%= err.get("pass")[i].message %></li>
+          <% }} %>
+        </ul>
+      </div>
+      <div class="form-group">
+        <label for="mail">MAIL</label>
+        <input type="text" name="mail" id="mail"
+          value="<%=form.mail %>" class="form-control">
+        <ul class="text-danger">
+          <% if (err!=null) { for (let i in err.get("mail")) { %>
+          <li><%= err.get("mail")[i].message %></li>
+          <% }} %>
+        </ul>
+      </div>
+      <div class="form-group">
+        <label for="age">AGE</label>
+        <input type="number" name="age" id="age"
+          value="<%=form.age %>" class="form-control">
+        <ul class="text-danger">
+          <% if (err!=null) { for (let i in err.get("age")) { %>
+          <li><%= err.get("age")[i].message %></li>
+          <% }} %>
+        </ul>
+      </div>
+      <input type="submit" value="作成" class="btn btn-primary">
+    </form>
+  </div>
+</body>
+
+
+--------------------------------------
+
+
+▼リスト6-25
+'use strict';
+module.exports = (sequelize, DataTypes) => {
+  const User = sequelize.define('User', {
+    name: {
+      type:DataTypes.STRING,
+      validate: {
+        notEmpty: {
+          msg: "名前は必ず入力して下さい。"
+        }
+      }
+    },
+    pass: {
+      type: DataTypes.STRING,
+      validate: {
+        notEmpty: {
+          msg: "パスワードは必ず入力下さい。"
+        }
+      }
+    },
+    mail: {
+      type: DataTypes.STRING,
+      validate: {
+        isEmail: {
+          msg: "メールアドレスを入力下さい。"
+        }
+      }
+    },
+    age: {
+      type: DataTypes.INTEGER,
+      validate: {
+        isInt: { msg: "整数を入力下さい。"},
+        min: {
+          args: [0],
+          msg: "ゼロ以上の値が必要です。"
+        }
+      }
+    }
+  }, {});
+  User.associate = function(models) {
+    // associations can be defined here
+  };
+  return User;
+};
+
+
+--------------------------------------
+
+
+▼リスト7-1
+'use strict';
+module.exports = (sequelize, DataTypes) => {
+  const Board = sequelize.define('Board', {
+    userId: {
+      type: DataTypes.INTEGER,
+      validate: {
+        notEmpty: {
+          msg: "利用者は必須です。"
+        }
+      }
+    },
+    message: {
+      type: DataTypes.STRING,
+      validate: {
+        notEmpty: {
+          msg: "メッセージは必須です。"
+        }
+      }
+    }
+  }, {});
+  Board.associate = function(models) {
+    Board.belongsTo(models.User);
+  };
+  return Board;
+};
+
+
+--------------------------------------
+
+
+▼リスト7-2
+User.associate = function(models) {
+  User.hasMany(models.Board);
+};
+
+
+--------------------------------------
+
+
+▼リスト7-3
+router.get('/login', (req, res, next) => {
+  var data = {
+     title:'Users/Login',
+     content:'名前とパスワードを入力下さい。'
+  }
+  res.render('users/login', data);
+});
+
+router.post('/login', (req, res, next) => {
+  db.User.findOne({
+    where:{
+      name:req.body.name,
+      pass:req.body.pass,
+    }
+  }).then(usr=>{
+    if (usr != null) {
+      req.session.login = usr;
+      let back = req.session.back;
+      if (back == null){
+        back = '/';
+      }
+      res.redirect(back);
+    } else {
+      var data = {
+        title:'Users/Login',
+        content:'名前かパスワードに問題があります。再度入力下さい。'
+      }
+      res.render('users/login', data);
+    }
+  })
+});
+
+
+--------------------------------------
+
+
+▼リスト7-4
+const express = require('express');
+const router = express.Router();
+const db = require('../models/index');
+const { Op } = require("sequelize");
+
+const pnum = 10;
+
+// ログインのチェック
+function check(req,res) {
+  if (req.session.login == null) {
+    req.session.back = '/boards';
+    res.redirect('/users/login');
+    return true;
+  } else {
+    return false;
+  }
+}
+
+// トップページ
+router.get('/',(req, res, next)=> {
+  res.redirect('/boards/0');
+});
+
+// トップページにページ番号をつけてアクセス
+router.get('/:page',(req, res, next)=> {
+  if (check(req,res)){ return };
+  const pg = req.params.page * 1;
+  db.Board.findAll({
+    offset: pg * pnum,
+    limit: pnum,
+    order: [
+      ['createdAt', 'DESC']
+    ],
+    include: [{
+      model: db.User,
+      required: true
+    }]
+  }).then(brds => {
+    var data = {
+      title: 'Boards',
+      login:req.session.login,
+      content: brds,
+      page:pg
+    }
+    res.render('boards/index', data);
+  });
+});
+
+// メッセージフォームの送信処理
+router.post('/add',(req, res, next)=> {
+  if (check(req,res)){ return };
+  db.sequelize.sync()
+    .then(() => db.Board.create({
+      userId: req.session.login.id,
+      message:req.body.msg
+    })
+    .then(brd=>{
+      res.redirect('/boards');
+    })
+    .catch((err)=>{
+      res.redirect('/boards');
+    })
+    )
+});
+
+// 利用者のホーム
+router.get('/home/:user/:id/:page',(req, res, next)=> {
+  if (check(req,res)){ return };
+  const id = req.params.id * 1;
+  const pg = req.params.page * 1;
+  db.Board.findAll({
+    where: {userId: id},
+    offset: pg * pnum,
+    limit: pnum,
+    order: [
+      ['createdAt', 'DESC']
+    ],
+    include: [{
+      model: db.User,
+      required: true
+    }]
+  }).then(brds => {
+    var data = {
+      title: 'Boards',
+      login:req.session.login,
+      userId:id,
+      userName:req.params.user,
+      content: brds,
+      page:pg
+    }
+    res.render('boards/home', data);
+  });
+});
+
+module.exports = router;
+
+
+--------------------------------------
+
+
+▼リスト7-5
+var boardsRouter = require('./routes/boards');
+app.use('/boards', boardsRouter);
+
+
+--------------------------------------
+
+
+▼リスト7-6
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta http-equiv="content-type"
+        content="text/html; charset=UTF-8">
+    <title><%= title %></title>
+    <link rel="stylesheet"
+    href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    crossorigin="anonymous">
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+
+<body class="container">
+  <header>
+    <h1 class="display-4">
+      <%= title %></h1>
+  </header>
+  <div role="main">
+    <p><%- content %></p>
+    <form method="post" action="/users/login">
+      <div class="form-group">
+        <label for="name">NAME</label>
+        <input type="text" name="name" id="name"
+          class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="pass">PASSWORD</label>
+        <input type="password" name="pass" id="pass"
+          class="form-control">
+      </div>
+      <input type="submit" value="ログイン"
+        class="btn btn-primary">
+    </form>
+    <p class="mt-4"><a href="/boards">&lt;&lt; Top へ戻る</a>｜
+      <a href="/users/add">アカウントの作成&gt;&gt;</a></p>
+  </div>
+</body>
+
+</html>
+
+
+--------------------------------------
+
+
+▼リスト7-7
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta http-equiv="content-type"
+        content="text/html; charset=UTF-8">
+    <title><%= title %></title>
+    <link rel="stylesheet"
+    href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    crossorigin="anonymous">
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+
+<body class="container">
+  <header>
+    <h1 class="display-4">
+      <%= title %></h1>
+  </header>
+  <div role="main">
+    <p class="h4">Welcome to <%= login.name %>.</p>
+    <form method="post" action="/boards/add">
+      <div class="row">
+        <div class="col-10">
+          <input type="text" name="msg"
+            class="form-control">
+        </div>
+        <input type="submit" value="送信"
+          class="btn btn-primary col-2">
+      </div>
+    </form>
+
+    <table class="table mt-5">
+      <% for(let i in content) { %>
+      <%- include('data_item', {val:content[i]}) %>
+      <% } %>
+    </table>
+
+    <ul class="pagination justify-content-center">
+      <li class="page-item">
+        <a href="/boards/<%= page - 1 %>"
+          class="page-link">&lt;&lt; prev</a>
+      </li>
+      <li class="page-item">
+        <a href="/boards/<%= page + 1 %>"
+          class="page-link">Next &gt;&gt;</a>
+      </li>
+    </ul>
+  </div>
+</body>
+
+</html>
+
+
+--------------------------------------
+
+
+▼リスト7-8
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta http-equiv="content-type"
+        content="text/html; charset=UTF-8">
+    <title><%= title %></title>
+    <link rel="stylesheet"
+    href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    crossorigin="anonymous">
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+
+<body class="container">
+
+  <header>
+    <h1 class="display-4">
+      <%= title %></h1>
+  </header>
+  <div role="main">
+    <p class="h4"><%= userName %>'s messages.</p>
+    <table class="table mt-5">
+      <% for(let i in content) { %>
+      <%- include('data_item', {val:content[i]}) %>
+      <% } %>
+    </table>
+
+    <ul class="pagination justify-content-center">
+      <li class="page-item">
+        <a href="/boards/home/<%=userName %>/<%=userId %>/<%= page - 1 %>"
+          class="page-link">&lt;&lt; prev</a>
+      </li>
+      <li class="page-item">
+        <a href="/boards/home/<%=userName %>/<%=userId %>/<%= page + 1 %>"
+          class="page-link">Next &gt;&gt;</a>
+      </li>
+    </ul>
+  </div>
+  <div class="text-left">
+    <a href="/boards">&lt;&lt; Top.</a>
+  </div>
+</body>
+
+</html>
+
+
+--------------------------------------
+
+
+▼リスト7-9
+<% if (val != null){ %>
+<tr class="row">
+  <th class="col-2">
+    <a class="text-dark" href="/boards/home/<%=val.User.name %>/<%=val.userId %>/0">
+      <%= val.User.name %></a></th>
+  <td class="col-7"><%= val.message %></td>
+  <%
+      var d = new Date(val.createdAt);
+      var dstr = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' +
+        d.getDate() + ' ' + d.getHours() + ':' + d.getMinutes() +
+        ':' + d.getSeconds();
+      %>
+  <td class="col-3"><%= dstr %></td>
+</tr>
+<% } %>
+
+
+--------------------------------------
+
+
+▼リスト7-10
+'use strict';
+module.exports = (sequelize, DataTypes) => {
+  const Markdata = sequelize.define('Markdata', {
+    userId: {
+      type: DataTypes.INTEGER,
+      validate: {
+        notEmpty: {
+          msg: "利用者は必須です。"
+        }
+      }
+    },
+    title: {
+      type: DataTypes.STRING,
+      validate: {
+        notEmpty: {
+          msg: "タイトルは必須です。"
+        }
+      }
+    },
+    content: {
+      type: DataTypes.TEXT,
+      validate: {
+        notEmpty: {
+          msg: "コンテンツは必須です。"
+        }
+      }
+    }
+  }, {});
+  Markdata.associate = function(models) {
+    Markdata.belongsTo(models.User);
+  };
+  return Markdata;
+};
+
+
+--------------------------------------
+
+
+▼リスト7-11
+User.associate = function(models) {
+  User.hasMany(models.Board);
+  User.hasMany(models.Markdata); //☆
+};
+
+
+--------------------------------------
+
+
+▼リスト7-12
+const express = require('express');
+const router = express.Router();
+const db = require('../models/index');
+const { Op } = require('sequelize');
+const MarkdownIt = require('markdown-it');
+const markdown = new MarkdownIt();
+
+const pnum = 10;
+
+// ログインチェックの関数
+function check(req,res) {
+  if (req.session.login == null) {
+    req.session.back = '/md';
+    res.redirect('/users/login');
+    return true;
+  } else {
+    return false;
+  }
+}
+
+// トップページへのアクセス
+router.get('/', (req, res, next)=> {
+  if (check(req,res)){ return };
+  db.Markdata.findAll({
+    where:{userId: req.session.login.id},
+    limit:pnum,
+    order: [
+      ['createdAt', 'DESC']
+    ]
+  }).then(mds=> {
+    var data = {
+      title: 'Markdown Search',
+      login: req.session.login,
+      message: '※最近の投稿データ',
+      form: {find:''},
+      content:mds
+    };
+    res.render('md/index', data);
+  });
+});
+
+// 検索フォームの送信処理
+router.post('/', (req, res, next)=> {
+  if (check(req,res)){ return };
+  db.Markdata.findAll({
+    where:{
+      userId:req.session.login.id,
+      content: {[Op.like]:'%'+req.body.find+'%'},
+    },
+    order: [
+      ['createdAt', 'DESC']
+    ]
+  }).then(mds=> {
+    var data = {
+      title: 'Markdown Search',
+      login: req.session.login,
+      message:'※"' + req.body.find +
+        '" で検索された最近の投稿データ',
+      form:req.body,
+      content:mds
+    };
+    res.render('md/index', data);
+  });
+});
+
+// 新規作成ページの表示
+router.get('/add', (req, res, next) => {
+  if (check(req,res)){ return };
+  res.render('md/add', { title: 'Markdown/Add' });
+});
+
+// 新規作成フォームの送信処理
+router.post('/add', (req, res, next) => {
+  if (check(req,res)){ return };
+  db.sequelize.sync()
+  .then(() => db.Markdata.create({
+    userId: req.session.login.id,
+    title: req.body.title,
+     content: req.body.content,
+  })
+  .then(model => {
+     res.redirect('/md');
+  })
+  );
+});
+
+// '/mark'へアクセスした際のリダイレクト
+router.get('/mark', (req, res, next) => {
+  res.redirect('/md');
+  return;
+});
+
+// 指定IDのMarkdata表示
+router.get('/mark/:id', (req, res, next) => {
+  if (check(req,res)){ return };
+  db.Markdata.findOne({
+    where: {
+      id: req.params.id,
+      userId: req.session.login.id
+    },
+  })
+  .then((model) => {
+    makepage(req, res, model, true);
+  });
+});
+
+// Markdataの更新処理
+router.post('/mark/:id', (req, res, next) => {
+  if (check(req,res)){ return };
+  db.Markdata.findByPk(req.params.id)
+    .then(md=> {
+      md.content = req.body.source;
+      md.save().then((model) => {
+        makepage(req, res, model, false);
+      });
+    })
+});
+
+// 指定IDのMarkdataの表示ページ作成
+function makepage(req, res, model, flg) {
+  var footer;
+  if (flg){
+     var d1 = new Date(model.createdAt);
+     var dstr1 = d1.getFullYear() + '-' + (d1.getMonth() + 1) + '-' + d1.getDate();
+     var d2 = new Date(model.updatedAt);
+     var dstr2 = d2.getFullYear() + '-' + (d2.getMonth() + 1) + '-' + d2.getDate();
+     footer = '(created: ' + dstr1 + ', updated: ' + dstr2 + ')';
+  } else {
+     footer = '(Updating date and time information...)'
+  }
+  var data = {
+     title: 'Markdown' ,
+     id: req.params.id,
+     head: model.title,
+     footer:footer,
+     content: markdown.render(model.content),
+     source: model.content
+  };
+  res.render('md/mark', data);
+}
+
+module.exports = router;
+
+
+--------------------------------------
+
+
+▼リスト7-13
+var marksRouter = require('./routes/marks');
+app.use('/md', marksRouter);
+
+
+--------------------------------------
+
+
+▼リスト7-14
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta http-equiv="content-type"
+        content="text/html; charset=UTF-8">
+    <title><%= title %></title>
+    <link rel="stylesheet"
+    href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    crossorigin="anonymous">
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+
+<body class="container">
+  <header>
+    <h1 class="display-4 text-primary">
+      <%= title %></h1>
+  </header>
+  <div role="main">
+    <p class="h5 my-4">Hi,
+      <span><%= login.name %></span>!<br>
+      Welcome to <%= title %>.</p>
+    <form action="/md" method="post">
+      <div class="form-group">
+        <label for="find">FIND</label>
+        <input type="text" name="find" id="find"
+          value="<%= form.find %>" class="form-control">
+      </div>
+      <input type="submit" value="検索" class="btn btn-primary">
+    </form>
+    <p class="my-4 h5"><%= message %></p>
+    <table class="table">
+      <% for (var i in content) { %>
+      <% var ob = content[i]; %>
+      <tr>
+        <td>
+          <a href="/md/mark/<%=ob.id %>" class="text-dark">
+            <%=ob.title %></a>
+        </td>
+      </tr>
+      <% } %>
+    </table>
+    <p> </p>
+    <p><a href="/md/add">※データを登録</a></p>
+  </div>
+</body>
+
+</html>
+
+
+--------------------------------------
+
+
+▼リスト7-15
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta http-equiv="content-type"
+        content="text/html; charset=UTF-8">
+    <title><%= title %></title>
+    <link rel="stylesheet"
+    href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    crossorigin="anonymous">
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+
+<body class="container">
+
+  <header>
+    <h1 class="display-4 text-primary">
+      <%= title %></h1>
+  </header>
+  <div role="main">
+    <form method="post" action="/md/add">
+      <div class="form-group">
+        <label>TITLE</label>
+        <input type="text" name="title" id="title"
+          class="form-control">
+      </div>
+      <div class="form-group">
+        <label>CONTENT</label>
+        <textarea name="content" id="content" rows="10"
+          class="form-control"></textarea>
+      </div>
+      <input type="submit" value="送信"
+        class="btn btn-primary">
+    </form>
+    <p class="mt-4"><a href="/md">&lt;&lt; Top へ戻る</a>
+  </div>
+</body>
+
+</html>
+
+
+--------------------------------------
+
+
+▼リスト7-16
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta http-equiv="content-type"
+        content="text/html; charset=UTF-8">
+    <title><%= title %></title>
+    <link rel="stylesheet"
+    href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    crossorigin="anonymous">
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+
+<body class="container">
+  <header>
+    <h1 class="display-4 text-primary">
+      <%= title %></h1>
+  </header>
+  <div role="main">
+    <p class="h5"><%= head %></p>
+    <form method="post" action="/md/mark/<%=id %>">
+      <div class="form-group">
+        <label for="source">SOURCE</label>
+        <textarea name="source" id="source" rows="5"
+          class="form-control"><%=source %></textarea>
+      </div>
+      <input type="submit" value="更新"
+        class="btn btn-primary">
+    </form>
+    <div class="card mt-4">
+      <div class="card-header text-center h5">
+        Preview
+      </div>
+      <div class="card-body">
+        <%- content %>
+      </div>
+      <div class="card-footer text-muted text-right">
+        <%=footer %>
+      </div>
+    </div>
+    <p class="mt-4"><a href="/md">&lt;&lt; Top へ戻る</a></p>
+  </div>
+</body>
+
+</html>
+
+
+--------------------------------------
+
+
+▼リストA-1
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta http-equiv="content-type"
+    content="text/html; charset=UTF-8">
+<title>HELLO</title>
+</head>
+
+<body>
+  <h1><script>document.write('Hello!');</script></h1>
+</body>
+</html>
+
+
+--------------------------------------
+
+
+▼リストA-2
+document.write('<p>This is "script.js".</p>');
+
+
+--------------------------------------
+
+
+▼リストA-3
+<body>
+  <h1>Hello</h1>
+  <script src="script.js"></script>
+</body>
+
+
+--------------------------------------
+
+
+▼リストA-4
+var price = 12300;
+document.write('<p>価格：' + price + '円</p>');
+const tax = 0.08;
+price = price * (1.0 + tax);
+document.write('<p>税込価格:' + price + '円</p>');
+
+
+--------------------------------------
+
+
+▼リストA-5
+var num = 12345;
+document.write('<p>' + num + 'は、');
+if (num % 2 == 0){
+  document.write('偶数。</p>');
+} else {
+  document.write('奇数。</p>');
+}
+
+
+--------------------------------------
+
+
+▼リストA-6
+var month = 4; //★月の値
+var season;
+
+switch (month) {
+  case 1: season = '冬'; break;
+  case 2: season = '冬'; break;
+  case 3: season = '春'; break;
+  case 4: season = '春'; break;
+  case 5: season = '春'; break;
+  case 6: season = '夏'; break;
+  case 7: season = '夏'; break;
+  case 8: season = '夏'; break;
+  case 9: season = '秋'; break;
+  case 10: season = '秋'; break;
+  case 11: season = '秋'; break;
+  case 12: season = '冬'; break;
+  default: season = '???';
+}
+document.write('<p>' + month + '月は、' + season + 'です。');
+
+
+--------------------------------------
+
+
+▼リストA-7
+const max = 12345; //★最大の値
+var num = 1;
+total = 0;
+
+while(num <= max){
+  total += num;
+  num++;
+}
+document.write('<p>' + max + 'までの合計は、' + total + 'です。');
+
+
+--------------------------------------
+
+
+▼リストA-8
+const max = 12345; //★最大の値
+var total = 0;
+
+for(var num = 1;num <= max;num++){
+  total += num;
+}
+document.write('<p>' + max + 'までの合計は、' + total + 'です。');
+
+
+--------------------------------------
+
+
+▼リストA-9
+function calc(max) {
+  var total = 0;
+  for(var num = 1;num <= max;num++){
+    total += num;
+  }
+  document.write('<p>' + max + 'までの合計は、' + total + 'です。');
+}
+
+calc(10);
+calc(100);
+calc(1000);
+calc(10000);
+
+
+--------------------------------------
+
+
+▼リストA-10
+function calc(max) {
+  var total = 0;
+  for(var num = 1;num <= max;num++){
+    total += num;
+  }
+  return total;
+}
+
+document.write('<ol>');
+document.write('<li>10まで：' + calc(10) + '</li>');
+document.write('<li>20まで：' + calc(20) + '</li>');
+document.write('<li>30まで：' + calc(30) + '</li>');
+document.write('<li>40まで：' + calc(40) + '</li>');
+document.write('<li>50まで：' + calc(50) + '</li>');
+document.write('</ol>');
+
+
+--------------------------------------
+
+
+▼リストA-11
+var arr = [12, 345, 67, 89];
+var answer = arr[0] + arr[1] + arr[2] + arr[3];
+
+document.write('<p>合計は、' + answer + 'です。');
+
+
+--------------------------------------
+
+
+▼リストA-12
+var arr = [100, 82, 69, 77, 91];
+var total = 0;
+for(var n in arr){
+  total += arr[n];
+}
+var average = total / 5;
+document.write('<p>合計は、' + total + 'です。平均点は、' + average + 'です。</p>');
+
+
+--------------------------------------
+
+
+▼リストA-13
+var obj = new Object();
+obj.data = [100, 82, 69, 77, 91];
+obj.calc = function () {
+  var total = 0;
+  for (var n in this.data) {
+    total += this.data[n];
+  }
+  var average = total / 5;
+  document.write('<p>合計は、' + total +
+    'です。平均点は、' + average + 'です。</p>');
+}
+
+obj.calc();
+
+
+
+--------------------------------------
+
+
+▼リストA-14
+var obj = {
+  data: [100, 82, 69, 77, 91],
+  calc: function () {
+    var total = 0;
+    for (var n in this.data) {
+      total += this.data[n];
+    }
+    var average = total / 5;
+    document.write('<p>合計は、' + total +
+      'です。平均点は、' + average + 'です。</p>');
+  }
+}
+
+obj.calc();
+
+
+--------------------------------------
+
+
+▼リストA-15
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta http-equiv="content-type"
+    content="text/html; charset=UTF-8">
+  <title>HELLO</title>
+  <script src="script.js"></script>
+</head>
+
+<body onload="initial();">
+  <h1>Hello</h1>
+  <p id="msg"></p>
+  <input type="text" id="input">
+  <input type="button" value="Click"
+    onclick="doclick();">
+</body>
+
+</html>
+
+
+--------------------------------------
+
+
+▼リストA-16
+var msg;
+var input;
+
+function initial(){
+  msg = document.getElementById('msg');
+  input = document.getElementById('input');
+  msg.textContent = '※何か書いて下さい。';
+}
+
+function doclick(e){
+  msg.textContent = '「' + input.value + '」と書きました。';
+}
+
+
+--------------------------------------
+
+
+▼リストA-17
+var msg;
+var input;
+
+function initial(){
+  msg = document.getElementById('msg');
+  input = document.getElementById('input');
+  msg.textContent = '※本体価格を入力：';
+}
+
+function doclick(e){
+  var price = input.value * 1;
+  var price2 = price * 1.08;
+  msg.textContent = price + '円の税込価格： ' + price2 + '円';
+}
+
+
+--------------------------------------
