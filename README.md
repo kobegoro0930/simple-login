@@ -1,9 +1,9 @@
 ## ◇作成画面
-- /users/new/<br>ユーザーアカウント作成画面
-- ログイン画面<br>/users/login/
-- ログイン成功後の画面<br>/
-- ログイン後に閲覧可能な画面<br>/users/
-- パスワード確認画面(未完)<br>/users/forget-pass
+- ユーザーアカウント作成画面　/users/new/
+- ログイン画面　/users/login/
+- ログイン成功後の画面　/
+- ログイン後に閲覧可能な画面　/users/
+- パスワード確認画面(未完)　/users/forget-pass
 
 ## ◇使用技術・パッケージ
 - node.js（16.17.1）
