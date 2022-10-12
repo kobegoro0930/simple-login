@@ -1,8 +1,16 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../models/index');
+const csrf = require('csurf');
+
+const csrfProtection = csrf({ cookie: false });
 
 router.get('/',(req, res, next)=> {
+  if (req.session.login == null) {
+    req.session.back = '/users/';
+    res.redirect('/users/login');
+    return true;
+  }
   db.User.findAll().then(users => {
     var data = {
       title: 'メンバー一覧',
@@ -12,14 +20,15 @@ router.get('/',(req, res, next)=> {
   });
 });
 
-router.get('/new',(req, res, next)=> {
+router.get('/new', csrfProtection, (req, res, next)=> {
   var data = {
-    title: '新規登録'
+    title: '新規登録',
+    csrfToken: req.csrfToken()
   }
   res.render('users/new', data);
 });
 
-router.post('/new',(req, res, next)=> {
+router.post('/new', csrfProtection, (req, res, next)=> {
   db.sequelize.sync()
     .then(() => db.User.create({
       name: req.body.name,
