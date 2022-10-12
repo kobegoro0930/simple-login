@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const db = require('../models/index');
 const csrf = require('csurf');
+const nodemailer = require('nodemailer');
 
 const csrfProtection = csrf({ cookie: false });
 
@@ -36,7 +37,7 @@ router.post('/new', csrfProtection, (req, res, next)=> {
       pass: req.body.pass,
       message: req.body.message
     }))
-    .then(usr => {
+    .then(user => {
       res.redirect('/users');
     });
 });
@@ -69,6 +70,59 @@ router.post('/login', (req, res, next) => {
         content:'メールアドレスかパスワードに問題があります。'
       }
       res.render('users/login', data);
+    }
+  })
+});
+
+router.get('/forget-pass', (req, res, next) => {
+  var data = {
+     title:'パスワード確認画面',
+     content:'入力いただいたメールアドレス宛に、パスワードをお送りいたします。'
+  }
+  res.render('users/forget-pass', data);
+});
+
+router.post('/forget-pass', (req, res, next) => {
+  db.User.findOne({
+    where:{
+      mail:req.body.mail,
+    }
+  }).then(user=>{
+    if (user != null) {
+      const smtp = nodemailer.createTransport({
+        port: 25,
+        host: 'localhost',
+        tls: {
+          rejectUnauthorized: false
+        },
+      });
+
+      const message = {
+        from: 'From:Simple-login',
+        to: '${user.mail}',
+        text: "パスワードは${user.pass}です。",
+        subject: 'Simple-loginよりパスワードのご連絡です。',
+      };
+
+      smtp.sendMail(message, (error, info) => {
+        if(error) {
+          console.log(error);
+        } else {
+          console.log(info);
+        }
+      });
+
+      var data = {
+        title:'ログイン画面',
+        content:'メールアドレスにパスワードをお送りしました。'
+      }
+      res.render('users/login', data);
+    } else {
+      var data = {
+        title:'パスワード確認画面',
+        content:'メールアドレスに問題があります。'
+      }
+      res.render('users/forget-pass', data);
     }
   })
 });

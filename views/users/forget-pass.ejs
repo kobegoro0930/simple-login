@@ -13,19 +13,15 @@
     </header>
     <div>
       <p><%- content %></p>
-      <form method="post" action="/users/login">
+      <form method="post" action="/users/forget-pass">
         <div>
           <label for="mail">メールアドレス</label>
           <input type="text" name="mail" id="mail">
         </div>
-        <div>
-          <label for="pass">パスワード</label>
-          <input type="password" name="pass" id="pass">
-        </div>
-        <input type="submit" value="ログイン">
+        <input type="submit" value="送信">
       </form>
-      <p><a href="/users/new">アカウントの作成</a></p>
-      <p><a href="/users/forget-pass">パスワードをお忘れの方</a></p>
+      <p><a href="/users/new">新規作成</a></p>
+      <p><a href="/users/login">ログインページ</a></p>
     </div>
   </body>
 
