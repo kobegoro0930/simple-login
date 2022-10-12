@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+  <head>
+    <meta http-equiv="content-type"
+      content="text/html; charset=UTF-8">
+    <title><%= title %></title>
+  </head>
+
+  <body>
+    <h1><%= title %></h1>
+    <div>
+      <form method="post" action="/users/new">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        <div>
+          <label for="name">名前</label>
+          <input type="text" name="name" id="name">
+        </div>
+        <div>
+          <label for="mail">メールアドレス</label>
+          <td><input type="text" name="mail" id="mail">
+        </div>
+        <div>
+          <label for="pass"">パスワード</label>
+          <input type="password" name="pass" id="pass">
+        </div>
+        <div>
+          <label for="message">一言メッセージ</label>
+          <td><input type="text" name="message" id="message">
+        </div>
+        <input type="submit" value="作成">
+      </form>
+    </div>
+  </body>
+
+</html>

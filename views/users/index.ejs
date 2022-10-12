@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+  <head>
+    <meta http-equiv="content-type"
+      content="text/html; charset=UTF-8">
+    <title><%= title %></title>
+  </head>
+
+  <body>
+    <header>
+      <h1><%= title %></h1>
+    </header>
+    <div>
+      <table>
+        <tr>
+          <th>ID</th>
+          <th>名前</th>
+          <th>メールアドレス</th>
+          <th>メッセージ</th>
+        </tr>
+        <% for(var i in content) { %>
+        <tr>
+          <% var user = content[i]; %>
+          <td><%= user.id %></td>
+          <td><%= user.name %></td>
+          <td><%= user.mail %></td>
+          <td><%= user.message %></td>
+        </tr>
+        <% } %>
+      </table>
+    </div>
+  </body>
+
+</html>
