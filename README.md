@@ -15,9 +15,11 @@
 - ログイン画面　/users/login/
 - ログイン成功後の画面　/
 - ログイン後に閲覧可能な画面　/users/
-- パスワード確認画面(未完)　/users/forget-pass
+- パスワードをお忘れの方　/users/forget-pass
+ーーーーー
+- パスワード再設定画面 /users/reset-pass
 
-## ◇使用技術・パッケージ
+## ◇使用技術・モジュール
 - node.js（16.17.1）
 - Express（4.16.1）
 - ORM：sequelize（6.24.0）
@@ -26,6 +28,9 @@
 - express-session
 - csurf
 - nodemailer
+ーーー
+- bcrypt
+- express-validator
 
 ## ◇理解出来ていない箇所
 - sessionのオプション設定箇所
