@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+  <head>
+    <meta http-equiv="content-type"
+      content="text/html; charset=UTF-8">
+    <title><%= title %></title>
+  </head>
+
+  <body>
+    <h1><%= title %></h1>
+    <p><%- content %></p>
+    <div>
+      <form method="post" action="/users/reset-pass">
+        <input type="hidden" name="_token" value=<%= csrfToken %>>
+        <input type="hidden" name="_resetToken" value=<%= passwordResetToken %>>
+        <input type="hidden" name="mail" value=<%= mail %>>
+        <div>
+          <p>メールアドレス：<%= mail %></p>
+        </div>
+        <div>
+          <label for="pass">パスワード</label>
+          <input type="password" name="pass" id="pass">
+        </div>
+        <div>
+          <label for="pass-confirm">パスワード（確認）</label>
+          <input type="password" name="confirm" id="pass-confirm">
+        </div>
+        <input type="submit" value="パスワードを再設定する">
+      </form>
+    </div>
+  </body>
+
+</html>
