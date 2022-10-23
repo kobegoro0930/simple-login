@@ -29,6 +29,15 @@ router.get('/new', (req, res, next)=> {
 router.post('/new', [
   check('name', '名前を入力してください。').notEmpty().escape(),
   check('mail', 'メールアドレスを正しく入力してください。').isEmail().escape(),
+  check('mail').custom(value => {
+    return db.User.count({
+      where: {mail: value}
+    }).then(userCount => {
+      if(userCount > 0) {
+        throw new Error('このメールアドレスはすでに登録されています。');
+      }
+    });
+  }),
   check('pass', 'パスワードを入力してください。').notEmpty().escape(),
   check('message', '一言メッセージを入力してください。').notEmpty().escape()
 ], (req, res, next)=> {
