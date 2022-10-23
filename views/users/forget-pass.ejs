@@ -14,6 +14,7 @@
     <div>
       <p><%- content %></p>
       <form method="post" action="/users/forget-pass">
+        <input type="hidden" name="_token" value=<%= csrfToken %>>
         <div>
           <label for="mail">メールアドレス</label>
           <input type="text" name="mail" id="mail">

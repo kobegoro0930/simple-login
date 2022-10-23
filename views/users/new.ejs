@@ -9,16 +9,17 @@
 
   <body>
     <h1><%= title %></h1>
+    <p><%- content %></p>
     <div>
       <form method="post" action="/users/new">
-        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        <input type="hidden" name="_token" value=<%= csrfToken %>>
         <div>
           <label for="name">名前</label>
-          <input type="text" name="name" id="name">
+          <input type="text" name="name" id="name" value="<%= form.name %>">
         </div>
         <div>
           <label for="mail">メールアドレス</label>
-          <td><input type="text" name="mail" id="mail">
+          <td><input type="text" name="mail" id="mail" value="<%= form.mail %>">
         </div>
         <div>
           <label for="pass"">パスワード</label>
@@ -26,7 +27,7 @@
         </div>
         <div>
           <label for="message">一言メッセージ</label>
-          <td><input type="text" name="message" id="message">
+          <td><input type="text" name="message" id="message" value="<%= form.message %>">
         </div>
         <input type="submit" value="作成">
       </form>
